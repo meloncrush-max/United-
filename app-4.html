@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connected - Dashboard</title>
+    <meta name="theme-color" content="#2d6a4f">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2d6a4f;
+            --primary-dark: #1b4332;
+            --primary-light: #52b788;
+            --accent: #95d5b2;
+            --text: #ffffff;
+            --bg: #081c15;
+            --gold: #ffd60a;
+            --error: #d62828;
+            --success: #52b788;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg) 0%, var(--primary-dark) 100%);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: rgba(27, 67, 50, 0.9);
+            border-bottom: 1px solid rgba(82, 183, 136, 0.3);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            sticky: top 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--accent);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .btn-logout {
+            background: var(--error);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-logout:hover {
+            background: #c41c1c;
+            transform: translateY(-2px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .welcome-section {
+            background: rgba(45, 106, 79, 0.3);
+            border: 1px solid var(--accent);
+            padding: 40px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .welcome-section h1 {
+            font-size: 36px;
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .welcome-section p {
+            color: var(--accent);
+            font-size: 18px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(27, 67, 50, 0.6);
+            border: 1px solid rgba(82, 183, 136, 0.3);
+            padding: 30px;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--gold);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 214, 10, 0.1);
+        }
+
+        .card-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+
+        .card-title {
+            color: var(--gold);
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .card-desc {
+            color: var(--accent);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .card-action {
+            margin-top: 15px;
+        }
+
+        .btn {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background: #5cc896;
+            transform: translateY(-2px);
+        }
+
+        .status-online {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #52b788;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--accent);
+            font-size: 12px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(82, 183, 136, 0.3);
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .message.error {
+            background: rgba(214, 40, 40, 0.2);
+            border: 1px solid var(--error);
+            color: #ff6b6b;
+            display: block;
+        }
+
+        .message.success {
+            background: rgba(82, 183, 136, 0.2);
+            border: 1px solid var(--success);
+            color: var(--success);
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .welcome-section h1 {
+                font-size: 28px;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <div class="navbar">
+        <div class="logo">🌍 Connected</div>
+        <div class="nav-links">
+            <a href="#discover">Discover</a>
+            <a href="#rooms">Rooms</a>
+            <a href="#profile">Profile</a>
+            <button class="btn-logout" onclick="handleLogout()">Logout</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h1>Welcome, <span id="userName">Friend</span>! 👋</h1>
+            <p>You're connected to a global community of innovators</p>
+        </div>
+
+        <!-- Messages -->
+        <div id="message" class="message"></div>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Discover Peers Card -->
+            <div class="card">
+                <div class="card-icon">🔍</div>
+                <div class="card-title">Discover Peers</div>
+                <div class="card-desc">
+                    Find collaborators working on similar projects. Connect with developers, designers, and innovators worldwide.
+                </div>
+                <div class="card-action">
+                    <button class="btn" onclick="navigateTo('discover')">Explore Now</button>
+                </div>
+            </div>
+
+            <!-- Create Room Card -->
+            <div class="card">
+                <div class="card-icon">📹</div>
+                <div class="card-title">Start Video Session</div>
+                <div class="card-desc">
+                    Create a peer-to-peer video room. Study, collaborate, or just chat with someone across Africa.
+                </div>
+                <div class="card-action">
+                    <button class="btn" onclick="navigateTo('rooms')">Create Room</button>
+                </div>
+            </div>
+
+            <!-- Translate Text Card -->
+            <div class="card">
+                <div class="card-icon">🌐</div>
+                <div class="card-title">Translate</div>
+                <div class="card-desc">
+                    Translate text to 100+ languages. Connect with people in their native language seamlessly.
+                </div>
+                <div class="card-action">
+                    <button class="btn" onclick="navigateTo('translate')">Translate Text</button>
+                </div>
+            </div>
+
+            <!-- AI Assistant Card -->
+            <div class="card">
+                <div class="card-icon">🤖</div>
+                <div class="card-title">AI Assistant</div>
+                <div class="card-desc">
+                    Get help from our AI. Detect sentiment, get recommendations, or ask questions.
+                </div>
+                <div class="card-action">
+                    <button class="btn" onclick="navigateTo('assistant')">Chat with AI</button>
+                </div>
+            </div>
+
+            <!-- Profile Card -->
+            <div class="card">
+                <div class="card-icon">👤</div>
+                <div class="card-title">My Profile</div>
+                <div class="card-desc">
+                    <span class="status-online"></span>
+                    Update your profile, view your activity, and manage your account settings.
+                </div>
+                <div class="card-action">
+                    <button class="btn" onclick="navigateTo('profile')">View Profile</button>
+                </div>
+            </div>
+
+            <!-- Settings Card -->
+            <div class="card">
+                <div class="card-icon">⚙️</div>
+                <div class="card-title">Settings</div>
+                <div class="card-desc">
+                    Configure your preferences, privacy settings, and notification options.
+                </div>
+                <div class="card-action">
+                    <button class="btn" onclick="navigateTo('settings')">Settings</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>🌍 Connected v2.0 | Empowering African Innovators Worldwide</p>
+        <p>© 2026 Connected. Built by Mukelo Ndwandwe.</p>
+    </div>
+
+    <script>
+        // ✅ FIXED: Use backend API only
+        const API_URL = 'http://localhost:3001';
+
+        // Check authentication on page load
+        window.addEventListener('load', () => {
+            const token = localStorage.getItem('accessToken');
+            
+            if (!token) {
+                // Not logged in, redirect to auth
+                window.location.href = './auth-FIXED.html';
+                return;
+            }
+
+            // Load user data
+            loadUserData(token);
+        });
+
+        // Load user profile
+        async function loadUserData(token) {
+            try {
+                // You could add a /auth/me endpoint to get user data
+                // For now, we'll show a placeholder
+                const userName = localStorage.getItem('userName') || 'Innovator';
+                document.getElementById('userName').textContent = userName;
+            } catch (err) {
+                console.error('Error loading user data:', err);
+            }
+        }
+
+        // Handle logout
+        async function handleLogout() {
+            try {
+                const token = localStorage.getItem('accessToken');
+                
+                await fetch(`${API_URL}/auth/logout`, {
+                    method: 'POST',
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    credentials: 'include'
+                });
+
+                // Clear local storage
+                localStorage.clear();
+                
+                // Redirect to login
+                window.location.href = './auth-FIXED.html';
+            } catch (err) {
+                console.error('Logout error:', err);
+                localStorage.clear();
+                window.location.href = './auth-FIXED.html';
+            }
+        }
+
+        // Navigation helper
+        function navigateTo(page) {
+            showMessage(`Navigating to ${page}...`, 'success');
+            
+            setTimeout(() => {
+                // Map pages to their files or handle inline
+                const pages = {
+                    'discover': 'discover.html',
+                    'rooms': 'rooms.html',
+                    'translate': 'translate.html',
+                    'assistant': 'ai-assistant.html',
+                    'profile': 'profile.html',
+                    'settings': 'settings.html'
+                };
+
+                if (pages[page]) {
+                    window.location.href = `./${pages[page]}`;
+                }
+            }, 500);
+        }
+
+        // Show message
+        function showMessage(text, type = 'success') {
+            const messageEl = document.getElementById('message');
+            messageEl.textContent = text;
+            messageEl.className = `message ${type}`;
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    messageEl.className = 'message';
+                }, 3000);
+            }
+        }
+
+        // Auto-refresh token before expiry
+        function setupTokenRefresh() {
+            // Refresh token 5 minutes before expiry (1 hour = 3600s)
+            setInterval(() => {
+                const token = localStorage.getItem('accessToken');
+                if (token) {
+                    fetch(`${API_URL}/auth/refresh`, {
+                        method: 'POST',
+                        credentials: 'include'
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.accessToken) {
+                            localStorage.setItem('accessToken', data.accessToken);
+                        }
+                    })
+                    .catch(err => console.error('Token refresh failed:', err));
+                }
+            }, 55 * 60 * 1000); // Every 55 minutes
+        }
+
+        setupTokenRefresh();
+    </script>
+</body>
+</html>

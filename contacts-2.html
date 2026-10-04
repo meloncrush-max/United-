@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connected - Contacts & Marketplace</title>
+    <meta name="theme-color" content="#2d6a4f">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2d6a4f;
+            --primary-dark: #1b4332;
+            --primary-light: #52b788;
+            --accent: #95d5b2;
+            --text: #ffffff;
+            --bg: #081c15;
+            --gold: #ffd60a;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg) 0%, var(--primary-dark) 100%);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(82, 183, 136, 0.2);
+        }
+
+        .header h1 {
+            color: var(--gold);
+            font-size: 32px;
+        }
+
+        .back-link {
+            color: var(--accent);
+            text-decoration: none;
+            padding: 10px 20px;
+            background: rgba(45, 106, 79, 0.5);
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: var(--primary);
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(82, 183, 136, 0.2);
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            background: none;
+            border: none;
+            color: var(--accent);
+            cursor: pointer;
+            font-size: 16px;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn.active {
+            color: var(--gold);
+            border-bottom-color: var(--gold);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: rgba(27, 67, 50, 0.5);
+            border: 1px solid rgba(82, 183, 136, 0.2);
+            padding: 20px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            background: rgba(27, 67, 50, 0.8);
+            border-color: var(--gold);
+        }
+
+        .card h3 {
+            color: var(--gold);
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: var(--accent);
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 8px;
+            background: var(--primary);
+            color: var(--text);
+            border: 1px solid var(--accent);
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+        }
+
+        .btn-danger {
+            background: #d62828;
+            border-color: #ff6b6b;
+        }
+
+        .btn-danger:hover {
+            background: #ff6b6b;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--accent);
+        }
+
+        .empty p {
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: var(--primary-dark);
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-primary:hover {
+            background: #ffed4e;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(27, 67, 50, 0.95);
+            padding: 40px;
+            border-radius: 12px;
+            border: 1px solid rgba(82, 183, 136, 0.3);
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .modal-content h2 {
+            color: var(--gold);
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--accent);
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--accent);
+            color: var(--text);
+            border-radius: 6px;
+            font-family: inherit;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-actions button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-submit {
+            background: var(--gold);
+            color: var(--primary-dark);
+        }
+
+        .btn-cancel {
+            background: rgba(82, 183, 136, 0.2);
+            color: var(--accent);
+            border: 1px solid var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👥 Contacts & Marketplace</h1>
+            <a href="app.html" class="back-link">← Back to App</a>
+        </div>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('contacts')">My Contacts</button>
+            <button class="tab-btn" onclick="switchTab('marketplace')">Marketplace</button>
+            <button class="tab-btn" onclick="switchTab('plans')">Plans</button>
+        </div>
+
+        <!-- CONTACTS TAB -->
+        <div id="contacts" class="tab-content active">
+            <div style="margin-bottom: 20px;">
+                <button class="btn-primary" onclick="openAddContactModal()">+ Add Contact</button>
+            </div>
+            <div class="grid" id="contactsGrid">
+                <div class="empty">
+                    <p>📞 No contacts yet. Add some to stay connected!</p>
+                    <button class="btn-primary" onclick="openAddContactModal()">Add Your First Contact</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MARKETPLACE TAB -->
+        <div id="marketplace" class="tab-content">
+            <div style="margin-bottom: 20px;">
+                <input type="text" id="searchInput" placeholder="🔍 Search by name or activity..." style="width: 100%; padding: 12px; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--accent); color: var(--text); border-radius: 6px;">
+            </div>
+            <div class="grid" id="marketplaceGrid">
+                <div class="empty">
+                    <p>⭐ Loading marketplace...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PLANS TAB -->
+        <div id="plans" class="tab-content">
+            <div style="margin-bottom: 20px;">
+                <button class="btn-primary" onclick="openAddPlanModal()">+ Create New Plan</button>
+            </div>
+            <div class="grid" id="plansGrid">
+                <div class="empty">
+                    <p>📝 No plans yet. Create one to organize your projects!</p>
+                    <button class="btn-primary" onclick="openAddPlanModal()">Create Your First Plan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Contact Modal -->
+    <div class="modal" id="addContactModal">
+        <div class="modal-content">
+            <h2>Add Contact</h2>
+            <form onsubmit="handleAddContact(event)">
+                <div class="form-group">
+                    <label for="contactName">Name</label>
+                    <input type="text" id="contactName" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactEmail">Email</label>
+                    <input type="email" id="contactEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="contactNotes">Notes</label>
+                    <textarea id="contactNotes" rows="3" placeholder="Add notes about this contact..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal('addContactModal')">Cancel</button>
+                    <button type="submit" class="btn-submit">Add Contact</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add Plan Modal -->
+    <div class="modal" id="addPlanModal">
+        <div class="modal-content">
+            <h2>Create Plan</h2>
+            <form onsubmit="handleAddPlan(event)">
+                <div class="form-group">
+                    <label for="planTitle">Title</label>
+                    <input type="text" id="planTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="planDescription">Description</label>
+                    <textarea id="planDescription" rows="3" placeholder="What's this plan about?"></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal('addPlanModal')">Cancel</button>
+                    <button type="submit" class="btn-submit">Create Plan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const SUPABASE_URL = 'https://yxqxlmkpqhwxdlrlvqqy.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4cXhsbWtwcWh3eGRscmx2cXF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTU3MzcyNDgsImV4cCI6MjAxMTMxMzI0OH0.8f0Iq5Rh4wfVEqWj3QS7v8X9Z9Y9Z9Z9Z9Z9Z9Z9Z9';
+        const API_URL = 'https://connected-backend-production.up.railway.app';
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        let currentUser = null;
+
+        async function init() {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (!user) {
+                window.location.href = 'auth.html';
+                return;
+            }
+            currentUser = user;
+            loadContacts();
+            loadMarketplace();
+            loadPlans();
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(tab).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        async function loadContacts() {
+            const { data } = await supabase.from('contacts').select('*').eq('user_id', currentUser.id);
+            const grid = document.getElementById('contactsGrid');
+            
+            if (!data || data.length === 0) {
+                grid.innerHTML = '<div class="empty"><p>📞 No contacts yet. Add some!</p><button class="btn-primary" onclick="openAddContactModal()">Add Contact</button></div>';
+                return;
+            }
+
+            grid.innerHTML = data.map(c => `
+                <div class="card">
+                    <h3>${c.name}</h3>
+                    <p>${c.email}</p>
+                    <p>${c.notes || 'No notes'}</p>
+                    <div class="card-actions">
+                        <button class="btn" onclick="alert('Messaging coming soon!')">💬 Message</button>
+                        <button class="btn btn-danger" onclick="deleteContact('${c.id}')">🗑️ Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function loadMarketplace() {
+            try {
+                const token = (await supabase.auth.getSession()).data.session?.access_token;
+                const response = await fetch(`${API_URL}/marketplace/discover?activity=studying`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const { users } = await response.json();
+                const grid = document.getElementById('marketplaceGrid');
+                
+                if (!users || users.length === 0) {
+                    grid.innerHTML = '<div class="empty"><p>⭐ No peers found yet. Check back soon!</p></div>';
+                    return;
+                }
+
+                grid.innerHTML = users.map(u => `
+                    <div class="card">
+                        <h3>${u.name}</h3>
+                        <p>📚 ${u.activity}</p>
+                        <p>⭐ Rating: ${u.rating || 'New'}</p>
+                        <div class="card-actions">
+                            <button class="btn" onclick="recommendUser('${u.id}')">👍 Recommend</button>
+                            <button class="btn" onclick="startCall('${u.id}')">📞 Call</button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                console.error('Marketplace load error:', err);
+            }
+        }
+
+        async function loadPlans() {
+            const { data } = await supabase.from('plans').select('*').eq('user_id', currentUser.id);
+            const grid = document.getElementById('plansGrid');
+            
+            if (!data || data.length === 0) {
+                grid.innerHTML = '<div class="empty"><p>📝 No plans yet.</p></div>';
+                return;
+            }
+
+            grid.innerHTML = data.map(p => `
+                <div class="card">
+                    <h3>${p.title}</h3>
+                    <p>${p.description || 'No description'}</p>
+                    <p style="font-size: 12px; color: #52b788;">Status: ${p.status}</p>
+                    <div class="card-actions">
+                        <button class="btn" onclick="alert('Plan details coming soon!')">📋 View</button>
+                        <button class="btn btn-danger" onclick="deletePlan('${p.id}')">🗑️ Delete</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openAddContactModal() {
+            document.getElementById('addContactModal').classList.add('show');
+        }
+
+        function openAddPlanModal() {
+            document.getElementById('addPlanModal').classList.add('show');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('show');
+        }
+
+        async function handleAddContact(e) {
+            e.preventDefault();
+            const name = document.getElementById('contactName').value;
+            const email = document.getElementById('contactEmail').value;
+            const notes = document.getElementById('contactNotes').value;
+
+            await supabase.from('contacts').insert({
+                user_id: currentUser.id,
+                name,
+                email,
+                notes,
+                created_at: new Date()
+            });
+
+            closeModal('addContactModal');
+            loadContacts();
+            e.target.reset();
+        }
+
+        async function handleAddPlan(e) {
+            e.preventDefault();
+            const title = document.getElementById('planTitle').value;
+            const description = document.getElementById('planDescription').value;
+
+            await supabase.from('plans').insert({
+                user_id: currentUser.id,
+                title,
+                description,
+                status: 'active',
+                created_at: new Date()
+            });
+
+            closeModal('addPlanModal');
+            loadPlans();
+            e.target.reset();
+        }
+
+        async function deleteContact(id) {
+            if (!confirm('Delete this contact?')) return;
+            await supabase.from('contacts').delete().eq('id', id);
+            loadContacts();
+        }
+
+        async function deletePlan(id) {
+            if (!confirm('Delete this plan?')) return;
+            await supabase.from('plans').delete().eq('id', id);
+            loadPlans();
+        }
+
+        function startCall(userId) {
+            alert('Starting call with ' + userId);
+        }
+
+        async function recommendUser(userId) {
+            const reason = prompt('Why are you recommending this person?');
+            if (!reason) return;
+
+            try {
+                const token = (await supabase.auth.getSession()).data.session?.access_token;
+                await fetch(`${API_URL}/marketplace/recommend`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                        recommended_user_id: userId,
+                        reason
+                    })
+                });
+                alert('✅ Recommendation sent!');
+            } catch (err) {
+                alert('Error sending recommendation');
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>

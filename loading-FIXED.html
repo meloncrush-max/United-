@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connected - Loading</title>
+    <meta name="theme-color" content="#2d6a4f">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2d6a4f;
+            --primary-dark: #1b4332;
+            --primary-light: #52b788;
+            --accent: #95d5b2;
+            --text: #ffffff;
+            --bg: #081c15;
+            --gold: #ffd60a;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg) 0%, var(--primary-dark) 100%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .loading-container {
+            max-width: 500px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .splash-image {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            animation: slideUp 0.8s ease-out;
+        }
+
+        .heading {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--gold);
+            margin: 0;
+            animation: fadeIn 1s ease-out 0.3s both;
+            letter-spacing: 1px;
+        }
+
+        .subheading {
+            text-align: center;
+            font-size: 18px;
+            color: var(--accent);
+            animation: fadeIn 1s ease-out 0.6s both;
+            margin: -30px 0 0 0;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(82, 183, 136, 0.3);
+            border-top: 4px solid var(--gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-text {
+            text-align: center;
+            font-size: 14px;
+            color: var(--accent);
+            animation: fadeIn 1s ease-out 0.9s both;
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.6;
+            }
+        }
+
+        .emoji {
+            display: inline-block;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .emoji-smile {
+            animation: pulse 2s ease-in-out infinite 0s;
+        }
+
+        .emoji-wink {
+            animation: pulse 2s ease-in-out infinite 0.4s;
+        }
+
+        /* Mobile optimization */
+        @media (max-width: 600px) {
+            .heading {
+                font-size: 28px;
+            }
+
+            .subheading {
+                font-size: 16px;
+            }
+
+            .splash-image {
+                max-width: 100%;
+            }
+        }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-container">
+        <!-- Splash Image -->
+        <img src="./splash-image.jpg" alt="Connected Community" class="splash-image" id="splashImage">
+
+        <!-- Main Heading with Emojis -->
+        <h1 class="heading">
+            <span class="emoji emoji-smile">🙂</span>
+            We're here for you
+            <span class="emoji emoji-wink">😉</span>
+        </h1>
+
+        <!-- Subheading -->
+        <p class="subheading">Connecting African innovators worldwide</p>
+
+        <!-- Loading Spinner -->
+        <div class="loading-spinner"></div>
+
+        <!-- Loading Text -->
+        <p class="loading-text">Getting everything ready...</p>
+    </div>
+
+    <script>
+        // Simulate loading time and redirect
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if the main app is loaded
+            const checkAppReady = setInterval(() => {
+                // You can customize this check based on your app's initialization
+                // For now, we'll just wait and then redirect to the main app
+                
+                // Simulate 3-5 seconds of loading
+                setTimeout(() => {
+                    clearInterval(checkAppReady);
+                    
+                    // Fade out the loading screen
+                    const container = document.querySelector('.loading-container');
+                    container.style.opacity = '0';
+                    container.style.transition = 'opacity 0.5s ease-out';
+                    
+                    // Redirect to main app (change this to your actual app URL)
+                    setTimeout(() => {
+                        window.location.href = './app-4.html';
+                    }, 500);
+                }, 3000);
+            }, 100);
+        });
+
+        // Fallback: ensure redirect happens after max time
+        setTimeout(() => {
+            window.location.href = './app-4.html';
+        }, 10000); // Max 10 seconds
+    </script>
+</body>
+</html>

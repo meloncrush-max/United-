@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connected - Peer-to-Peer Video for African Innovators</title>
+    <meta name="description" content="Connect with peers worldwide. Study, code, create together via peer-to-peer video.">
+    <meta name="theme-color" content="#2d6a4f">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #2d6a4f;
+            --primary-dark: #1b4332;
+            --primary-light: #52b788;
+            --accent: #95d5b2;
+            --text: #ffffff;
+            --bg: #081c15;
+            --gold: #ffd60a;
+            --error: #d62828;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--bg) 0%, var(--primary-dark) 100%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background: rgba(27, 67, 50, 0.8);
+            border-bottom: 1px solid rgba(82, 183, 136, 0.2);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 32px;
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--accent);
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(45, 106, 79, 0.5);
+            color: var(--gold);
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-login {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
+        .btn-login:hover {
+            background: rgba(45, 106, 79, 0.5);
+            color: var(--gold);
+        }
+
+        .btn-signup {
+            background: var(--gold);
+            color: var(--primary-dark);
+        }
+
+        .btn-signup:hover {
+            background: #ffed4e;
+        }
+
+        .hero {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .hero-content h1 {
+            font-size: 56px;
+            margin-bottom: 20px;
+            color: var(--gold);
+        }
+
+        .hero-content p {
+            font-size: 20px;
+            color: var(--accent);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 15px 40px;
+            font-size: 16px;
+        }
+
+        .btn-primary:hover {
+            background: #52b788;
+            transform: scale(1.05);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--gold);
+            color: var(--gold);
+            padding: 13px 38px;
+            font-size: 16px;
+        }
+
+        .btn-secondary:hover {
+            background: var(--gold);
+            color: var(--primary-dark);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 60px;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 100%;
+        }
+
+        .feature {
+            background: rgba(45, 106, 79, 0.3);
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid rgba(82, 183, 136, 0.2);
+        }
+
+        .feature h3 {
+            color: var(--gold);
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .feature p {
+            color: var(--accent);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .nav-links {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .hero {
+                padding: 40px 20px;
+            }
+
+            .hero-content h1 {
+                font-size: 36px;
+            }
+
+            .hero-content p {
+                font-size: 16px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">🌍 Connected</div>
+        <ul class="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+        </ul>
+        <div class="auth-buttons">
+            <a href="auth.html" class="btn btn-login">Login</a>
+            <a href="auth.html" class="btn btn-signup">Sign Up</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Connect. Collaborate. Create.</h1>
+            <p>Join thousands of African innovators, students, and professionals collaborating in real-time via peer-to-peer video.</p>
+            
+            <div class="cta-buttons">
+                <a href="auth.html" class="btn btn-primary">Get Started Free</a>
+                <button class="btn btn-secondary" onclick="alert('Demo coming soon!')">Watch Demo</button>
+            </div>
+
+            <div class="features" id="features">
+                <div class="feature">
+                    <h3>📚 Study Together</h3>
+                    <p>Find study partners, join group sessions, and learn collaboratively in real-time.</p>
+                </div>
+                <div class="feature">
+                    <h3>💻 Code & Build</h3>
+                    <p>Pair program, debug together, and share your screen with peer developers.</p>
+                </div>
+                <div class="feature">
+                    <h3>🎨 Create & Design</h3>
+                    <p>Brainstorm ideas, get feedback, and create together with visual collaboration.</p>
+                </div>
+                <div class="feature">
+                    <h3>🌍 13+ Languages</h3>
+                    <p>Speak your language. Auto-translate conversations for seamless communication.</p>
+                </div>
+                <div class="feature">
+                    <h3>🤖 Mukelo AI</h3>
+                    <p>Get instant help, find perfect study partners, and personalized recommendations.</p>
+                </div>
+                <div class="feature">
+                    <h3>🔒 Peer-to-Peer</h3>
+                    <p>Your video is encrypted and goes directly between peers. No servers in between.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Simple interactivity
+        console.log('Connected v2 loaded!');
+    </script>
+</body>
+</html>
